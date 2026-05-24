@@ -7,12 +7,12 @@ import Products from './Components/Products.jsx'
 import Cart from './Components/Cart.jsx'
 import Profile from './Components/Profile.jsx'
 import Home from './Components/Home.jsx'
-import ErrorHandling from './Components/ErrorElement'
-const Router = createBrowserRouter([
+import ErrorElement from './Components/ErrorElement'
+const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <ErrorHandling />,
+    errorElement: <ErrorElement />,
     children: [
       {element:<Home />,
       index: true}
@@ -33,6 +33,6 @@ const Router = createBrowserRouter([
 ])
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+  <RouterProvider router={router}/>
   </StrictMode>,
 )
