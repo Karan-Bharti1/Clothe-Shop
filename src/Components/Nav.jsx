@@ -1,5 +1,7 @@
 import { NavLink } from "react-router-dom";
-
+import { FaShoppingCart } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
+import { FaShopify } from "react-icons/fa";
 const Nav = () => {
   return (
     <header className="navbar">
@@ -7,15 +9,15 @@ const Nav = () => {
 
       <nav className="navbar__links">
         <NavLink to="/products"  className="navbar__link">
-          Products
+       <FaShopify/>
         </NavLink>
 
         <NavLink to="/cart" className="navbar__link">
-          Cart
+        <FaShoppingCart/>
         </NavLink>
 
         <NavLink to="/profile"  className="navbar__link">
-          Profile
+        <CgProfile/>
         </NavLink>
       </nav>
     </header>
