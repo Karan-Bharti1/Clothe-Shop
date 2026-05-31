@@ -224,3 +224,24 @@ text-decoration: none;
   left: 15%;
  
 }
+.category-head{
+  text-align: center;
+}
+.categories-container{
+  display: flex;
+ flex-wrap: wrap;
+}
+.category-image{
+width:250px;
+margin:auto;
+height:300px;
+
+cursor: pointer;
+gap: 0.5rem;
+margin-top: 0.5px;
+}
+.category-image img{
+  object-fit: cover;
+  width: 250px;
+  height: 300px;
+}
