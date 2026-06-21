@@ -25,3 +25,6 @@ const Nav = () => {
 };
 
 export default Nav;
+// 2 ways:
+// // Blank=>backend Request => Data display
+// Initial Display=>backend Request =>Data display

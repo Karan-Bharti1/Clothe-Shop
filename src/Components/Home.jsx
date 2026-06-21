@@ -1,17 +1,11 @@
 import {Link} from "react-router-dom"
 import { FaShopify } from "react-icons/fa";
 import {categories} from "../data.js"
-const CategoryCard=({category})=>{
-    const {categoryName,imageURL}=category
-    
-    return (
-    <Link key={categoryName}  to={`/products/${categoryName}`}>
-<img   src={imageURL}/>
-    </Link >)
-}
+import CategoryCard from "./CategoryCard.jsx"
+import Footer from "./Footer"
 const Home=()=>{
     return (<>
-<h1>
+
 <section>
     <div className="img-container">
     <img className="img-home" src="https://images.pexels.com/photos/33517294/pexels-photo-33517294.jpeg"/>
@@ -19,7 +13,7 @@ const Home=()=>{
   </div>
 </section>
 <section>
-    <h3 className="category-head">Popular Categories</h3>
+    <h1 className="category-head">Popular Categories</h1>
    <div className="categories-container">
  {
     categories.map(category=>(
@@ -31,7 +25,7 @@ const Home=()=>{
 
    </div>
 </section>
-</h1>
+<Footer/>
     </>)
 }
 export default Home
