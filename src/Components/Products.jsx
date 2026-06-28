@@ -1,7 +1,7 @@
+
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { products } from "../data";
-import { categories } from "../data";
+import { products, categories } from "../data";
 
 const ProductCard = ({ product }) => {
   const {
@@ -31,21 +31,33 @@ const ProductCard = ({ product }) => {
   );
 };
 
-// export default ProductCard;
 const Products = () => {
   const { categoryName } = useParams();
 
+  // Original Products (Never Changes)
+  const [allProducts] = useState(products);
+
+  // Filter States
   const [search, setSearch] = useState("");
   const [gender, setGender] = useState("");
   const [rating, setRating] = useState(0);
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] =
+    useState([]);
 
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  // Products shown on UI
+  const [filteredProducts, setFilteredProducts] =
+    useState(products);
 
-  useEffect(() => {
-    let updatedProducts = [...products];
+  // Common Filter Function
+  const applyFilters = (
+    searchValue = search,
+    genderValue = gender,
+    ratingValue = rating,
+    categoriesValue = selectedCategories
+  ) => {
+    let updatedProducts = [...allProducts];
 
-    // Category Route Filter
+    // Route Category Filter
     if (categoryName) {
       updatedProducts = updatedProducts.filter(
         (product) =>
@@ -55,63 +67,121 @@ const Products = () => {
     }
 
     // Search Filter
-    if (search) {
+    if (searchValue) {
       updatedProducts = updatedProducts.filter((product) =>
         product.productName
           .toLowerCase()
-          .includes(search.toLowerCase())
+          .includes(searchValue.toLowerCase())
       );
     }
 
     // Gender Filter
-    if (gender) {
+    if (genderValue) {
       updatedProducts = updatedProducts.filter(
-        (product) => product.gender === gender
+        (product) => product.gender === genderValue
       );
     }
 
     // Rating Filter
     updatedProducts = updatedProducts.filter(
-      (product) => product.ratings >= rating
+      (product) => product.ratings >= ratingValue
     );
 
-    // Category Checkbox Filter
-    if (!categoryName && selectedCategories.length > 0) {
-      updatedProducts = updatedProducts.filter((product) =>
-        selectedCategories.includes(product.category)
+    // Checkbox Category Filter
+    if (
+      !categoryName &&
+      categoriesValue.length > 0
+    ) {
+      updatedProducts = updatedProducts.filter(
+        (product) =>
+          categoriesValue.includes(product.category)
       );
     }
 
     setFilteredProducts(updatedProducts);
-  }, [
-    search,
-    gender,
-    rating,
-    selectedCategories,
-    categoryName,
-  ]);
+  };
 
+  // Search
+  const searchHandler = (e) => {
+    const value = e.target.value;
+
+    setSearch(value);
+
+    applyFilters(
+      value,
+      gender,
+      rating,
+      selectedCategories
+    );
+  };
+
+  // Gender
+  const genderHandler = (e) => {
+    const value = e.target.value;
+
+    setGender(value);
+
+    applyFilters(
+      search,
+      value,
+      rating,
+      selectedCategories
+    );
+  };
+
+  // Rating
+  const ratingHandler = (e) => {
+    const value = Number(e.target.value);
+
+    setRating(value);
+
+    applyFilters(
+      search,
+      gender,
+      value,
+      selectedCategories
+    );
+  };
+
+  // Category Checkbox
   const categoryHandler = (category) => {
-    if (selectedCategories.includes(category)) {
-      setSelectedCategories(
+    let updatedCategories;
+
+    if (
+      selectedCategories.includes(category)
+    ) {
+      updatedCategories =
         selectedCategories.filter(
           (item) => item !== category
-        )
-      );
+        );
     } else {
-      setSelectedCategories([
+      updatedCategories = [
         ...selectedCategories,
         category,
-      ]);
+      ];
     }
+
+    setSelectedCategories(updatedCategories);
+
+    applyFilters(
+      search,
+      gender,
+      rating,
+      updatedCategories
+    );
   };
+
+  // Runs only when route changes
+  useEffect(() => {
+    applyFilters();
+  }, [categoryName]);
 
   return (
     <>
       <section className="product-head">
         <h3>
           {categoryName
-            ? `${categoryName} `
+            ? `${categoryName}`
             : "All Products"}
         </h3>
 
@@ -119,9 +189,7 @@ const Products = () => {
           type="text"
           placeholder="Search Products..."
           value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
-          }
+          onChange={searchHandler}
         />
       </section>
 
@@ -140,9 +208,7 @@ const Products = () => {
                 name="gender"
                 value=""
                 checked={gender === ""}
-                onChange={(e) =>
-                  setGender(e.target.value)
-                }
+                onChange={genderHandler}
               />
               All
             </label>
@@ -153,9 +219,7 @@ const Products = () => {
                 name="gender"
                 value="male"
                 checked={gender === "male"}
-                onChange={(e) =>
-                  setGender(e.target.value)
-                }
+                onChange={genderHandler}
               />
               Male
             </label>
@@ -166,9 +230,7 @@ const Products = () => {
                 name="gender"
                 value="female"
                 checked={gender === "female"}
-                onChange={(e) =>
-                  setGender(e.target.value)
-                }
+                onChange={genderHandler}
               />
               Female
             </label>
@@ -185,9 +247,7 @@ const Products = () => {
               max="5"
               step="0.5"
               value={rating}
-              onChange={(e) =>
-                setRating(Number(e.target.value))
-              }
+              onChange={ratingHandler}
             />
 
             <p>{rating} ⭐ & Above</p>
@@ -200,7 +260,9 @@ const Products = () => {
               <h4>Categories</h4>
 
               {categories.map((category) => (
-                <label key={category.categoryName}>
+                <label
+                  key={category.categoryName}
+                >
                   <input
                     type="checkbox"
                     checked={selectedCategories.includes(
@@ -221,12 +283,16 @@ const Products = () => {
         </div>
 
         <div className="products-container">
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.productName}
-              product={product}
-            />
-          ))}
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <ProductCard
+                key={product.productName}
+                product={product}
+              />
+            ))
+          ) : (
+            <h2>No Products Found</h2>
+          )}
         </div>
       </section>
     </>
