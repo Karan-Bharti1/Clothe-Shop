@@ -1,6 +1,7 @@
 const Profile=()=>{
+    const name="Madhu"
     return (<>
-<h1>I am A Profile Page</h1>
+<h1>{name}</h1>
     </>)
 }
 export default Profile

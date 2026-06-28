@@ -1,4 +1,4 @@
-const products=[
+export const products=[
     {
       productName: "Embroidered Satin Saree",
       sizes: [
@@ -257,7 +257,7 @@ const products=[
         "XL"
       ],
       ratings: 4.5,
-      imgURL: "https://cdn.rajwadi.com/image/cache/data/cotton-silk-white-kurta-pajama-45197-800x1100.jpg",
+      imgURL: "https://www.nabia.in/products/nabia-blue-solid-shirt-collar-cotton-kurta-for-men?srsltid=AfmBOoo3i6o8cOxbyr_al_yoFJKozWblR2rBiikAeMGOvFIcyhSLatgV",
       category: "Traditional",
       gender: "male",
       brand: "Manyavar",
