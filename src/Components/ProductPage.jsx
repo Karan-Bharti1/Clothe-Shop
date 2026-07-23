@@ -1,10 +1,10 @@
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import { products } from "../data.js";
-
+import { GoArrowLeft } from "react-icons/go";
 
 const ProductPage = () => {
   const { productName } = useParams();
-
+const navigate=useNavigate()
   const currentProduct = products.find(
     (product) => product.productName === productName
   );
@@ -16,8 +16,14 @@ const ProductPage = () => {
     currentProduct.price -
       (currentProduct.price * currentProduct.discountPercentage) / 100
   );
+  const handleBackToThePage=()=>{
+navigate(-1)
+  }
   return (
     <section className="product-page">
+      <div className="back-arrow-product">
+      <span onClick={handleBackToThePage}><GoArrowLeft /></span>
+      </div>
       <div className="product-container">
 
         {/* Left Section */}

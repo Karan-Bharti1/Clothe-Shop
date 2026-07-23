@@ -2,40 +2,13 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { products, categories } from "../data";
-
-const ProductCard = ({ product }) => {
-  const {
-    productName,
-    ratings,
-    imgURL,
-    price,
-    brand,
-  } = product;
-
-  return (
-    <div className="product-card">
-      <img src={imgURL} alt={productName} />
-
-      <h4>{productName}</h4>
-
-      <p>{brand}</p>
-
-      <p>⭐ {ratings}</p>
-
-      <p>₹{price}</p>
-
-      <button className="primary-btn">
-        View Details
-      </button>
-    </div>
-  );
-};
+import ProductCard from "./ProductCard.jsx"
 
 const Products = () => {
   const { categoryName } = useParams();
 
   // Original Products (Never Changes)
-  const [allProducts] = useState(products);
+  const [allProducts,setAllProducts] = useState([]);
 
   // Filter States
   const [search, setSearch] = useState("");
@@ -46,8 +19,18 @@ const Products = () => {
 
   // Products shown on UI
   const [filteredProducts, setFilteredProducts] =
-    useState(products);
+    useState([]);
+    useEffect(()=>{
+      fetch("https://pregrad-clothe.vercel.app/products")
+      .then(res=>res.json())
+      .then((res=>{
+        setAllProducts(res)
+        setFilteredProducts(res)
 
+      }),[])
+
+      
+    },[])
   // Common Filter Function
   const applyFilters = (
     searchValue = search,
@@ -300,3 +283,6 @@ const Products = () => {
 };
 
 export default Products;
+
+
+// Frontend se backend ke domain ko call krte =>fetch(http://)=> That domain route us to any IP Adress=> BackendServer
