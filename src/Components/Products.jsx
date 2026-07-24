@@ -1,17 +1,22 @@
 
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { products, categories } from "../data";
+import {  categories } from "../data";
 import ProductCard from "./ProductCard.jsx"
-
+import { useSelector,useDispatch } from 'react-redux';
+import {addProductData} from "./slices/productSlice"
+import ShimmerCard from "./ShimmerCard"
 const Products = () => {
   const { categoryName } = useParams();
-
+const products=useSelector(state=>state.product)
+console.log(products)
+const dispatch=useDispatch()
   // Original Products (Never Changes)
   const [allProducts,setAllProducts] = useState([]);
 
   // Filter States
   const [search, setSearch] = useState("");
+  const [load,setLoad]=useState(false)
   const [gender, setGender] = useState("");
   const [rating, setRating] = useState(0);
   const [selectedCategories, setSelectedCategories] =
@@ -19,15 +24,24 @@ const Products = () => {
 
   // Products shown on UI
   const [filteredProducts, setFilteredProducts] =
-    useState([]);
+    useState(null);
     useEffect(()=>{
+      setLoad(true)
       fetch("https://pregrad-clothe.vercel.app/products")
       .then(res=>res.json())
       .then((res=>{
-        setAllProducts(res)
-        setFilteredProducts(res)
-
-      }),[])
+   
+        dispatch(addProductData(res))
+       setAllProducts(res)
+       setFilteredProducts(res)
+        
+      }
+      
+      )
+      
+      ).finally(()=>{
+        setLoad(false)
+      })
 
       
     },[])
@@ -159,6 +173,7 @@ const Products = () => {
     applyFilters();
   }, [categoryName]);
 
+
   return (
     <>
       <section className="product-head">
@@ -266,14 +281,20 @@ const Products = () => {
         </div>
 
         <div className="products-container">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
+        {load &&
+  Array.from({ length: 6 }).map((_, index) => (
+    <ShimmerCard key={index} />
+  ))}
+
+          {filteredProducts && filteredProducts.length>0 && (
+            filteredProducts?.map((product) => (
               <ProductCard
                 key={product.productName}
                 product={product}
               />
             ))
-          ) : (
+          )  }
+          {!load &&filteredProducts && filteredProducts.length===0 && (
             <h2>No Products Found</h2>
           )}
         </div>

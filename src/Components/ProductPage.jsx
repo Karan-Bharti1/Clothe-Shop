@@ -1,9 +1,10 @@
 import { useParams,useNavigate } from "react-router-dom";
-import { products } from "../data.js";
+// import { products } from "../data.js";
 import { GoArrowLeft } from "react-icons/go";
-
+import {useSelector} from "react-redux"
 const ProductPage = () => {
   const { productName } = useParams();
+  const products=useSelector(state=>state.product)
 const navigate=useNavigate()
   const currentProduct = products.find(
     (product) => product.productName === productName

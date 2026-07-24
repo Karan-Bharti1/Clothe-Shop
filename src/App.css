@@ -634,3 +634,87 @@ padding: 0.5rem;
   cursor: pointer;
   font-size: 40px;
 }
+/* ---------------- SHIMMER ---------------- */
+
+.shimmer-card {
+  width: 250px;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background: #ececec;
+  border-radius: 6px;
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -180px;
+  width: 180px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.75),
+    transparent
+  );
+  animation: shimmer 1.2s infinite;
+}
+
+/* Image */
+
+.shimmer-image {
+  width: 100%;
+  height: 250px;
+  margin-bottom: 15px;
+}
+
+/* Product Name */
+
+.shimmer-title {
+  width: 85%;
+  height: 22px;
+  margin-bottom: 15px;
+}
+
+/* Brand + Rating */
+
+.shimmer-small {
+  width: 70px;
+  height: 18px;
+  margin-bottom: 15px;
+}
+
+/* Price */
+
+.shimmer-price {
+  width: 80px;
+  height: 20px;
+  margin-bottom: 18px;
+}
+
+/* Button */
+
+.shimmer-button {
+  width: 100%;
+  height: 38px;
+  border-radius: 6px;
+}
+
+@keyframes shimmer {
+
+  0% {
+    left: -180px;
+  }
+
+  100% {
+    left: 100%;
+  }
+
+}
